@@ -30,16 +30,21 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.micalculadora.MVVM.model.ListaDeBotones
-import com.example.micalculadora.MVVM.viewmodel.ColorDeLosBotones
 
+import com.example.micalculadora.MVVM.viewmodel.ViewModelCalculadora
+
+var viewModel: ViewModelCalculadora = ViewModelCalculadora()
 @Composable
-fun PracticaCalculadora(modifier: Modifier =Modifier){
+fun PracticaCalculadora(modifier: Modifier =Modifier,viewModelCalculadora: ViewModelCalculadora){
 
 Column( modifier = Modifier
     .fillMaxSize()
     .fillMaxWidth()
-    .background(Color.Cyan),
+    .background(Color.Cyan)
+    .padding(bottom = 50.dp),
     horizontalAlignment = Alignment.End) //eliminar luego el color era para ver que estaba bien(ESTA COLUMNA ES LA CONTENEDORA DE LA VENTANA,no se puede declarar el horizontalalighment en la segunda)
     {
         Row(modifier = Modifier.fillMaxWidth().background(Color.Red).padding(top = 45.dp))
@@ -56,6 +61,7 @@ Column( modifier = Modifier
         }
     Column(modifier = Modifier.padding(top = 20.dp), horizontalAlignment = Alignment.End) // esto para que el texto se pege a la izquierda
     {
+        Spacer(modifier = Modifier.size(30.dp))
         //tenemos que darle un padding al lateral para que encaje de forma correcta(este texto muestra la operacion)
         Text(text = "2134+456",
             textAlign = TextAlign.End, //creo que esta segunda llamada no aplica podria quitarse
@@ -79,10 +85,10 @@ Column( modifier = Modifier
         {
     items(ListaDeBotones()){
         var textoBoton =it.toString()
-        Button(onClick = {},
+        Button(onClick = {viewModelCalculadora.Boton_Dato(textoBoton)},
             modifier = Modifier.size(80.dp).padding(10.dp),
             shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = ColorDeLosBotones(textoBoton)) //para pasar un color como argumento hay que encapsularlo en buttoncolors
+            colors = ButtonDefaults.buttonColors(containerColor = viewModelCalculadora.ColorDeLosBotones(textoBoton)) //para pasar un color como argumento hay que encapsularlo en buttoncolors
             )
         {
             Text(text = it, color = Color.Black, fontSize = 20.sp)
@@ -92,11 +98,12 @@ Column( modifier = Modifier
     }
 
     }
+    Spacer(modifier = Modifier.size(110.dp))
 }
 
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingPreviewLogin_Instagram() {
-    PracticaCalculadora(Modifier)
+    PracticaCalculadora(Modifier,viewModel )
 }
