@@ -1,6 +1,5 @@
 package com.example.micalculadora.MVVM.view
 
-import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,7 +26,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -42,10 +40,11 @@ import com.example.micalculadora.MVVM.viewmodel.ViewModelCalculadora
 
 val viewModel: ViewModelCalculadora = ViewModelCalculadora()
 @Composable
-fun PracticaCalculadora(modifier: Modifier =Modifier,viewModelCalculadora: ViewModelCalculadora){
-    val activity = LocalContext.current as Activity
+fun PracticaCalculadora(modifier: Modifier =Modifier,viewModel: ViewModelCalculadora){
+
     //variables que cargan los datos del viewmodel
     val calculo = viewModel.operacion.observeAsState()
+    val resultado = viewModel.resultado.observeAsState()
 Column( modifier = Modifier
     .fillMaxSize()
     .fillMaxWidth()
@@ -62,14 +61,14 @@ Column( modifier = Modifier
             )
             Text(text = "Mi calculadora", fontSize = 20.sp, modifier = Modifier.padding(start = 10.dp, top = 8.dp))
             Icon(Icons.Default.Clear, contentDescription = " ",
-                Modifier.clickable { activity.finish()}
+                Modifier.clickable { }
                     .padding(start =180.dp).size(20.dp))
         }
     Column(modifier = Modifier.padding(top = 20.dp), horizontalAlignment = Alignment.End) // esto para que el texto se pege a la izquierda
     {
         Spacer(modifier = Modifier.size(30.dp))
         //tenemos que darle un padding al lateral para que encaje de forma correcta(este texto muestra la operacion)
-        Text(text = calculo.value.toString(), //le damos un  valor vacio a la cadena si es null (al principio del programa)
+        Text(text = calculo.value.toString()?:" ", //le damos un  valor vacio a la cadena si es null (al principio del programa)
             textAlign = TextAlign.End, //creo que esta segunda llamada no aplica podria quitarse
             fontSize = 26.sp,
             maxLines = 1,
@@ -78,7 +77,7 @@ Column( modifier = Modifier
         )
         Spacer(modifier.size(10.dp))
         //este texto muestra el resultado
-        Text(text = ""?:"",
+        Text(text = resultado.value.toString()?:" ",
             textAlign = TextAlign.End, //creo que esta segunda llamada no aplica podria quitarse
             fontSize = 50.sp,
             maxLines = 1,
@@ -91,10 +90,10 @@ Column( modifier = Modifier
         {
     items(ListaDeBotones()){
         var textoBoton =it.toString()
-        Button(onClick = {viewModelCalculadora.Boton_Dato(textoBoton)},
+        Button(onClick = {viewModel.Boton_Dato(textoBoton)},
             modifier = Modifier.size(80.dp).padding(10.dp),
             shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = viewModelCalculadora.ColorDeLosBotones(textoBoton)) //para pasar un color como argumento hay que encapsularlo en buttoncolors
+            colors = ButtonDefaults.buttonColors(containerColor = viewModel.ColorDeLosBotones(textoBoton)) //para pasar un color como argumento hay que encapsularlo en buttoncolors
             )
         {
             Text(text = it, color = Color.Black, fontSize = 20.sp)

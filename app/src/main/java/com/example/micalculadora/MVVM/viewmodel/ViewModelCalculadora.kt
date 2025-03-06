@@ -22,7 +22,7 @@ class ViewModelCalculadora : ViewModel(){
     val operacion : LiveData<String> = _operacion
 
     private  val _resultado = MutableLiveData("")
-    val resultado : LiveData<String>  = _operacion
+    val resultado : LiveData<String>  = _resultado
 
     //este metodo dara color a los botones en funcion del texto que recibe como parametro
     fun ColorDeLosBotones(boton :String): Color { //recordar que el tipo de variable que se retorna en kotlin va delante
@@ -41,7 +41,8 @@ class ViewModelCalculadora : ViewModel(){
                 return
             }
             if (texto.equals("=")){
-                _operacion.value =_resultado.value
+                _resultado.value=_operacion.value
+                Log.i("los resultado son",_resultado.value.toString())
                 return
             }
 
