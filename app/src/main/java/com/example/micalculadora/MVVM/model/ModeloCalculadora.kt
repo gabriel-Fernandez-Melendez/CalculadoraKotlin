@@ -4,11 +4,11 @@ package com.example.micalculadora.MVVM.model
 
 fun ListaDeBotones():List<String>{
     val lista = listOf(
-        "C", " ", " ", "÷",
+        "C", "", "", "÷",
         "7", "8", "9", "*",
         "4", "5", "6", "-",
         "1", "2", "3", "+",
-        " ", "0", ":", "="
+        "", "0", ":", "="
     )
     return lista
 }
