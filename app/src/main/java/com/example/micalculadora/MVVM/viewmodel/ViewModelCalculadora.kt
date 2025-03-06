@@ -49,6 +49,10 @@ class ViewModelCalculadora : ViewModel(){
                 _resultado.value =Calculo(_operacion.value.toString())
                 return
             }
+            if(texto.equals("÷")){
+                _operacion.value+="/"
+                return
+            }
             _operacion.value=it+texto
             //Log.i("los numeros son",operacion.value.toString())
 
