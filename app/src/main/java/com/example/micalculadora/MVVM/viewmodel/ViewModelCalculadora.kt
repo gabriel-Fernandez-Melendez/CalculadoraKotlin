@@ -8,6 +8,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import org.mozilla.javascript.Context
+import org.mozilla.javascript.Scriptable
 
 
 class ViewModelCalculadora : ViewModel(){
@@ -33,7 +35,7 @@ class ViewModelCalculadora : ViewModel(){
     }
 
     fun Boton_Dato(texto : String){
-        Log.i("se preciono el : ",texto) //para testear que se conecto bien la clase
+        //Log.i("se preciono el : ",texto) //para testear que se conecto bien la clase
         //hay que meter esta condicional del que el objeto no sea nulo para poder borrar y concatenar numeros en la cadena
         _operacion.value?.let {
             if (texto.equals("C")){
@@ -42,13 +44,24 @@ class ViewModelCalculadora : ViewModel(){
             }
             if (texto.equals("=")){
                 _resultado.value=_operacion.value
-                Log.i("los resultado son",_resultado.value.toString())
+                //Log.i("los resultado son",_resultado.value.toString())
+                // calculo con la funcion declarada abajo(podria meterse la llamada en el = )
+                _resultado.value =Calculo(_operacion.value.toString())
                 return
             }
-
             _operacion.value=it+texto
-            Log.i("los numeros son",operacion.value.toString())
+            //Log.i("los numeros son",operacion.value.toString())
+
+
         }
 
+    }
+
+    fun Calculo(calculo : String ):String{
+        val calculador:Context=Context.enter()
+        calculador.optimizationLevel =-1
+        val cadena : Scriptable =calculador.initStandardObjects()
+        val resultado:String =calculador.evaluateString(cadena,calculo,"Javascript",1,null).toString() //hay que transformarlo en string por que es un tipo que asumo que es generico llamado any
+        return resultado
     }
 }

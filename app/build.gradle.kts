@@ -43,6 +43,8 @@ dependencies {
 
     //dependencia para usar live data ya que no funciona con asStateflow
     implementation("androidx.compose.runtime:runtime-livedata:1.7.8")
+    //dependencia de kotlin que tiene la funcionalidad de calculos basicos, como math de java
+    implementation("org.mozilla:rhino:1.7R4")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
