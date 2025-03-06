@@ -1,5 +1,6 @@
 package com.example.micalculadora.MVVM.view
 
+import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,9 +22,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -36,10 +40,12 @@ import com.example.micalculadora.MVVM.model.ListaDeBotones
 
 import com.example.micalculadora.MVVM.viewmodel.ViewModelCalculadora
 
-var viewModel: ViewModelCalculadora = ViewModelCalculadora()
+val viewModel: ViewModelCalculadora = ViewModelCalculadora()
 @Composable
 fun PracticaCalculadora(modifier: Modifier =Modifier,viewModelCalculadora: ViewModelCalculadora){
-
+    val activity = LocalContext.current as Activity
+    //variables que cargan los datos del viewmodel
+    val calculo = viewModel.operacion.observeAsState()
 Column( modifier = Modifier
     .fillMaxSize()
     .fillMaxWidth()
@@ -56,14 +62,14 @@ Column( modifier = Modifier
             )
             Text(text = "Mi calculadora", fontSize = 20.sp, modifier = Modifier.padding(start = 10.dp, top = 8.dp))
             Icon(Icons.Default.Clear, contentDescription = " ",
-                Modifier.clickable { }
+                Modifier.clickable { activity.finish()}
                     .padding(start =180.dp).size(20.dp))
         }
     Column(modifier = Modifier.padding(top = 20.dp), horizontalAlignment = Alignment.End) // esto para que el texto se pege a la izquierda
     {
         Spacer(modifier = Modifier.size(30.dp))
         //tenemos que darle un padding al lateral para que encaje de forma correcta(este texto muestra la operacion)
-        Text(text = "2134+456",
+        Text(text = calculo.value.toString(), //le damos un  valor vacio a la cadena si es null (al principio del programa)
             textAlign = TextAlign.End, //creo que esta segunda llamada no aplica podria quitarse
             fontSize = 26.sp,
             maxLines = 1,
@@ -72,7 +78,7 @@ Column( modifier = Modifier
         )
         Spacer(modifier.size(10.dp))
         //este texto muestra el resultado
-        Text(text = "2134+45676",
+        Text(text = ""?:"",
             textAlign = TextAlign.End, //creo que esta segunda llamada no aplica podria quitarse
             fontSize = 50.sp,
             maxLines = 1,
