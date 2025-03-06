@@ -1,5 +1,6 @@
 package com.example.micalculadora.MVVM.view
 
+import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,6 +27,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -41,18 +43,18 @@ import com.example.micalculadora.MVVM.viewmodel.ViewModelCalculadora
 val viewModel: ViewModelCalculadora = ViewModelCalculadora()
 @Composable
 fun PracticaCalculadora(modifier: Modifier =Modifier,viewModel: ViewModelCalculadora){
-
+    val activity = LocalContext.current as Activity
     //variables que cargan los datos del viewmodel
     val calculo = viewModel.operacion.observeAsState()
     val resultado = viewModel.resultado.observeAsState()
 Column( modifier = Modifier
     .fillMaxSize()
     .fillMaxWidth()
-    .background(Color.Cyan)
+    .background(Color.White)
     .padding(bottom = 50.dp),
     horizontalAlignment = Alignment.End) //eliminar luego el color era para ver que estaba bien(ESTA COLUMNA ES LA CONTENEDORA DE LA VENTANA,no se puede declarar el horizontalalighment en la segunda)
     {
-        Row(modifier = Modifier.fillMaxWidth().background(Color.Red).padding(top = 45.dp))
+        Row(modifier = Modifier.fillMaxWidth().background(Color.White).padding(top = 45.dp))
         {
             Image(
                 modifier = Modifier.size(40.dp).padding(start = 10.dp),
@@ -61,7 +63,7 @@ Column( modifier = Modifier
             )
             Text(text = "Mi calculadora", fontSize = 20.sp, modifier = Modifier.padding(start = 10.dp, top = 8.dp))
             Icon(Icons.Default.Clear, contentDescription = " ",
-                Modifier.clickable { }
+                Modifier.clickable {activity.finish() }
                     .padding(start =180.dp).size(20.dp))
         }
     Column(modifier = Modifier.padding(top = 20.dp), horizontalAlignment = Alignment.End) // esto para que el texto se pege a la izquierda
